@@ -6,19 +6,23 @@
 use App\Foundation\Application;
 use App\Providers\AppServiceProvider;
 use Monolog\Logger;
+use Silex\Provider\MonologServiceProvider;
+use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\TwigServiceProvider;
+use Silex\Provider\UrlGeneratorServiceProvider;
+use Ziadoz\Silex\Provider\CapsuleServiceProvider;
 
 $app   = new Application();
 $debug = config('app.debug');
 
-$app->register(new Silex\Provider\MonologServiceProvider(), [
+$app->register(new MonologServiceProvider(), [
     'monolog.level'   => $debug ? Logger::WARNING : Logger::ERROR,
     'monolog.logfile' => STORAGE_PATH.'/logs/app.log',
 ]);
 
-$app->register(new Silex\Provider\SessionServiceProvider());
+$app->register(new SessionServiceProvider());
 
-$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+$app->register(new UrlGeneratorServiceProvider());
 
 $app->register(new TwigServiceProvider(), [
     'twig.path'    => VIEW_PATH,
@@ -34,6 +38,20 @@ $app->register(new TwigServiceProvider(), [
          * Twig throws an exception instead (default to false).
          */
         'strict_variables' => true,
+    ],
+]);
+
+$app->register(new CapsuleServiceProvider, [
+    'capsule.connection' => [
+        'driver'    => 'mysql',
+        'host'      => 'localhost',
+        'database'  => 'database',
+        'username'  => 'username',
+        'password'  => 'password',
+        'charset'   => 'utf8',
+        'collation' => 'utf8_unicode_ci',
+        'prefix'    => '',
+        'logging'   => false,
     ],
 ]);
 
