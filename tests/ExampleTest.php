@@ -1,8 +1,6 @@
 <?php
 use App\Foundation\Application;
-use Phalcon\Http\Client\Request;
-use Phalcon\Mvc\Router;
-use Phalcon\Mvc\Url;
+use Symfony\Component\HttpKernel\Client;
 
 /**
  * Author: Abel Halo <zxz054321@163.com>

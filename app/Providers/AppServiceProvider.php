@@ -24,6 +24,7 @@ class AppServiceProvider implements ServiceProviderInterface
         });
 
         $app['twig'] = $app->share($app->extend('twig', function ($twig) {
+            /** @noinspection PhpUndefinedMethodInspection */
             $twig->addFunction(new \Twig_SimpleFunction('asset', function ($path) {
                 return asset($path);
             }));
