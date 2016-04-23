@@ -6,6 +6,7 @@
 namespace App\Providers;
 
 use App\Foundation\Config;
+use Illuminate\Contracts\Config\Repository;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 use SplFileInfo;
@@ -29,6 +30,7 @@ class ConfigServiceProvider implements ServiceProviderInterface
         $env = ROOT.'/_';
 
         if (file_exists($env)) {
+            /** @noinspection PhpIncludeInspection */
             $config->merge(require $env);
         }
 
@@ -39,10 +41,10 @@ class ConfigServiceProvider implements ServiceProviderInterface
     /**
      * Load the configuration items from all of the files.
      *
-     * @param  \Illuminate\Contracts\Config\Repository $repository
+     * @param  Repository $repository
      * @return void
      */
-    protected function loadConfigurationFiles(\Illuminate\Contracts\Config\Repository $repository)
+    protected function loadConfigurationFiles(Repository $repository)
     {
         foreach ($this->getConfigurationFiles() as $key => $path) {
             /** @noinspection PhpIncludeInspection */

@@ -9,6 +9,18 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
+ * Throw an Http Exception with the given data.
+ *
+ * @param  int $code
+ * @param  string $message
+ * @return void
+ */
+function abort($code, $message = '')
+{
+    app()->abort($code, $message);
+}
+
+/**
  * Get the available container instance.
  *
  * @param  string $make
@@ -23,6 +35,37 @@ function app($make = null)
     }
 
     return $app[ $make ];
+}
+
+/**
+ * Generate an asset path for the application.
+ *
+ * @param  string $path
+ * @return string
+ */
+function asset($path)
+{
+    /** @var Request $request */
+    $request = app('request');
+
+    return $request->getBasePath().'/'.$path;
+}
+
+/**
+ * Generate a url based on base url.
+ *
+ * @param  string $relative
+ * @return string
+ */
+function base_url($relative = null)
+{
+    $url = request()->getBaseUrl();
+
+    if ($relative) {
+        $url = $url.'/'.$relative;
+    }
+
+    return $url;
 }
 
 /**
@@ -48,34 +91,11 @@ function config($key = null, $default = null)
 }
 
 /**
- * Throw an Http Exception with the given data.
- *
- * @param  int $code
- * @param  string $message
- * @return void
+ * @return Request
  */
-function abort($code, $message = '')
+function request()
 {
-    app()->abort($code, $message);
-}
-
-/**
- * Get the evaluated view contents for the given view.
- *
- * @param  string $name
- * @param  array $data
- * @return Twig_Environment
- */
-function view($name = null, array $data = [])
-{
-    /** @var Twig_Environment $twig */
-    $twig = app('twig');
-
-    if (func_num_args() === 0) {
-        return $twig;
-    }
-
-    return $twig->render($name.'.twig', $data);
+    return app('request');
 }
 
 /**
@@ -120,34 +140,22 @@ function session($key = null, $default = null)
     return $session->get($key, $default);
 }
 
-/**
- * Generate a url based on base url.
- *
- * @param  string $relative
- * @return string
- */
-function base_url($relative = null)
-{
-    /** @var Request $request */
-    $request = app('request');
 
-    if ($relative) {
-        return $request->getBaseUrl().'/'.$relative;
-    } else {
-        return $request->getBaseUrl();
+/**
+ * Get the evaluated view contents for the given view.
+ *
+ * @param  string $name
+ * @param  array $data
+ * @return Twig_Environment
+ */
+function view($name = null, array $data = [])
+{
+    /** @var Twig_Environment $twig */
+    $twig = app('twig');
+
+    if (func_num_args() === 0) {
+        return $twig;
     }
-}
 
-/**
- * Generate an asset path for the application.
- *
- * @param  string $path
- * @return string
- */
-function asset($path)
-{
-    /** @var Request $request */
-    $request = app('request');
-
-    return $request->getBasePath().'/'.$path;
+    return $twig->render($name.'.twig', $data);
 }
