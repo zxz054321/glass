@@ -6,10 +6,13 @@
 use App\Foundation\Application;
 use App\Providers\AppServiceProvider;
 use Monolog\Logger;
+use Silex\Provider\HttpFragmentServiceProvider;
 use Silex\Provider\MonologServiceProvider;
+use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
+use Silex\Provider\WebProfilerServiceProvider;
 use Ziadoz\Silex\Provider\CapsuleServiceProvider;
 
 $app   = new Application();
@@ -54,5 +57,17 @@ $app->register(new CapsuleServiceProvider, [
         'logging'   => false,
     ],
 ]);
+
+if ($debug) {
+    /*
+     * Profiler
+     */
+    $app->register(new HttpFragmentServiceProvider());
+    $app->register(new ServiceControllerServiceProvider());
+    $app->register(new WebProfilerServiceProvider(), [
+        'profiler.cache_dir'    => STORAGE_PATH.'/framework/cache/profiler',
+        'profiler.mount_prefix' => '/_profiler',
+    ]);
+}
 
 $app->register(new AppServiceProvider());
