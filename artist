@@ -1,0 +1,21 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Author: Abel Halo <zxz054321@163.com>
+ */
+
+use Symfony\Component\Console\Application;
+
+require 'bootstrap/autoload.php';
+require 'bootstrap/app.php';
+
+$app->boot();
+
+$console  = new Application();
+$commands = config('commands');
+
+foreach ($commands as $command) {
+    $console->add(new $command);
+}
+
+$console->run();
