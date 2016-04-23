@@ -9,7 +9,7 @@ return [
      * stack traces will be shown on every error that occurs within your
      * application. If disabled, nothing is shown.
      */
-    'debug'    => true,
+    'debug'    => false,
 
     /*
      * Here you may specify the default timezone for your application, which

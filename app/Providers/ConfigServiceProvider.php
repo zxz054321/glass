@@ -5,7 +5,7 @@
 
 namespace App\Providers;
 
-use Illuminate\Config\Repository;
+use App\Foundation\Config;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 use SplFileInfo;
@@ -22,9 +22,15 @@ class ConfigServiceProvider implements ServiceProviderInterface
      */
     public function register(Application $app)
     {
-        $config = new Repository();
+        $config = new Config();
 
         $this->loadConfigurationFiles($config);
+
+        $env = ROOT.'/_';
+
+        if (file_exists($env)) {
+            $config->merge(require $env);
+        }
 
         $app['debug']  = $config->get('app.debug', false);
         $app['config'] = $config;
@@ -67,7 +73,6 @@ class ConfigServiceProvider implements ServiceProviderInterface
 
     /**
      * Get the configuration file nesting path.
-
      * @param SplFileInfo $file
      * @param $configPath
      * @return string

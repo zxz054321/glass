@@ -5,7 +5,6 @@
 
 return [
     'commands' => [
-        App\Console\Greet::class,
         App\Console\Migrate::class,
     ],
 ];
